@@ -1,0 +1,10 @@
+2023-01-09 18:44:59,421 ERROR 连接IoT
+System.Net.Sockets.SocketException (0x80004005): 通常每个套接字地址(协议/网络地址/端口)只允许使用一次。
+   在 System.Net.Sockets.Socket.DoBind(EndPoint endPointSnapshot, SocketAddress socketAddress)
+   在 System.Net.Sockets.Socket.Bind(EndPoint localEP)
+   在 Utilities.Network.UDPClient.Connect(Boolean canReceive) 位置 D:\programming\Wayzim\CommonUtilities\Utilities2\Utilities\Network\UDPClient.cs:行号 85
+   在 Utilities.Network.UDPClient.Connect() 位置 D:\programming\Wayzim\CommonUtilities\Utilities2\Utilities\Network\UDPClient.cs:行号 68
+   在 IoTToolkit.IoTCommunicator.Connect() 位置 D:\programming\Wayzim\CommonUtilities\IoTToolkit\IoTToolkit.Core\IoTCommunicator.cs:行号 66
+   在 IoTToolkit.ZTO.IoTToolkitVM.ConnectCmdEx() 位置 D:\programming\Wayzim\CommonUtilities\IoTToolkit\IoTToolkit.ZTO\IoTToolkitVM.cs:行号 132
+   在 Utilities.Windows.SimpleCommand.ExecuteCore(Object parameter) 位置 D:\programming\Wayzim\CommonUtilities\Utilities2\Utilities\Windows\SimpleCommand.cs:行号 153
+   在 Utilities.Windows.SimpleCommand.Execute(Object parameter) 位置 D:\programming\Wayzim\CommonUtilities\Utilities2\Utilities\Windows\SimpleCommand.cs:行号 134
