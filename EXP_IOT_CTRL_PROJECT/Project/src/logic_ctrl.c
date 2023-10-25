@@ -26,6 +26,15 @@ MODULE_STATUS_QUEUE  moduleStatusQueue;
 COMM_NODE_T uartSendQueueBuff[uartSendQueueSize];
 COMM_SEND_QUEUE uartSendQueue;
 COMM_NODE_T comm_node;
+
+
+// 
+#define uarttmpQueueSize  60
+COMM_NODE_T uarttmpQueueBuff[uarttmpQueueSize];
+
+
+
+
 u8  comm_busy_flag;
 u8  polling_num;//轮询站号(从1开始)
 
@@ -56,7 +65,7 @@ void InitUartSendQueue(void)
     q->queue = uartSendQueueBuff;
     q->front = q->rear = 0;
 }
-void AddUartSendData2Queue(COMM_NODE_T x)
+void AddUarttmpData2Queue(COMM_NODE_T x)
 {
     COMM_SEND_QUEUE *q = &uartSendQueue;
     //队列满
@@ -67,6 +76,7 @@ void AddUartSendData2Queue(COMM_NODE_T x)
     q->rear = (q->rear + 1) % q->maxSize; // 求出队尾的下一个位置
     q->queue[q->rear] = x; // 把x的值赋给新的队尾
 }
+
 COMM_NODE_T* GetUartSendDataFromQueue(void)
 {
     COMM_SEND_QUEUE *q = &uartSendQueue;
@@ -93,7 +103,52 @@ u8 IsUartSendQueueFree(void)
 }
 
 
+#if 1 
 
+void logic_uarttmp_init(void)
+{
+    u16 i = 0;
+    for (i = 0; i < uarttmpQueueSize; i++) {
+        uarttmpQueueBuff[i].value = INVALUE;
+    }
+}
+
+
+void AddUartSendData2Queue(COMM_NODE_T x) 
+{
+    u16 i = 0;
+    for (i = 0; i < uarttmpQueueSize;i++) {
+        if (uarttmpQueueBuff[i].value == INVALUE) {
+            uarttmpQueueBuff[i] = x;
+            uarttmpQueueBuff[i].value = VALUE;
+            return;
+        }
+    }
+}
+
+
+void logic_cycle_decrease(void)
+{
+    u16 i = 0;
+    for (i = 0; i < uarttmpQueueSize; i++) {
+        if (uarttmpQueueBuff[i].value == VALUE) {
+            if (uarttmpQueueBuff[i].comm_interval != 0) {
+                uarttmpQueueBuff[i].comm_interval--;
+            }
+            if (uarttmpQueueBuff[i].comm_interval == 0) {
+                AddUarttmpData2Queue(uarttmpQueueBuff[i]);
+                uarttmpQueueBuff[i].value = INVALUE;
+            }
+        }
+    }
+}
+
+
+#endif
+
+
+
+//
 void InitModuleStatusQueue(void)
 {
     MODULE_STATUS_QUEUE *q;
@@ -211,7 +266,7 @@ void InputScanProc()
         bPhoto1Info.input_info.input_middle_state = bPhoto1Info.input_info.input_state;
         bPhoto1Info.input_info.input_confirm_times = 0;
     }
-    if (bPhoto1Info.trig_cnt > 300) {
+    if (bPhoto1Info.trig_cnt > 600) {
         bPhoto1Info.trig_cnt = 0;
         if (bPhoto1Info.input_info.input_state == 1) {
             Linkage_Stop_Photo_Ctrl_Handle(0);
@@ -240,7 +295,7 @@ void InputScanProc()
         bPhoto2Info.input_info.input_middle_state = bPhoto2Info.input_info.input_state;
         bPhoto2Info.input_info.input_confirm_times = 0;
     }
-    if (bPhoto2Info.trig_cnt > 300) {
+    if (bPhoto2Info.trig_cnt > 600) {
         bPhoto2Info.trig_cnt = 0;
         if (bPhoto2Info.input_info.input_state == 1) {
             Linkage_Stop_Photo_Ctrl_Handle(1);
@@ -270,7 +325,7 @@ void InputScanProc()
         bPhoto3Info.input_info.input_middle_state = bPhoto3Info.input_info.input_state;
         bPhoto3Info.input_info.input_confirm_times = 0;
     }
-    if (bPhoto3Info.trig_cnt > 300) {
+    if (bPhoto3Info.trig_cnt > 600) {
         bPhoto3Info.trig_cnt = 0;
         if (bPhoto3Info.input_info.input_state == 1) {
             Linkage_Stop_Photo_Ctrl_Handle(2);
@@ -300,7 +355,7 @@ void InputScanProc()
         bPhoto4Info.input_info.input_confirm_times = 0;
     }
 
-    if (bPhoto4Info.trig_cnt > 300) {
+    if (bPhoto4Info.trig_cnt > 600) {
         bPhoto4Info.trig_cnt = 0;
         if (bPhoto4Info.input_info.input_state == 1) {
             Linkage_Stop_Photo_Ctrl_Handle(3);
@@ -329,7 +384,7 @@ void InputScanProc()
         bPhoto5Info.input_info.input_middle_state = bPhoto5Info.input_info.input_state;
         bPhoto5Info.input_info.input_confirm_times = 0;
     }
-    if (bPhoto5Info.trig_cnt > 300) {
+    if (bPhoto5Info.trig_cnt > 600) {
         bPhoto5Info.trig_cnt = 0;
         if (bPhoto5Info.input_info.input_state == 1) {
             Linkage_Stop_Photo_Ctrl_Handle(4);
@@ -574,7 +629,6 @@ u8 get_photo_input_status(u8 belt_index)
         return 0;
     }
 }
-
 u8 get_inverter_fault_status(INVERTER_STATUS_T inverter_status)
 {
     if(inverter_status.fault_code & 0x1)//485通讯故障
@@ -646,12 +700,33 @@ void Linkage_Stop_Photo_Ctrl_Handle(u8 photo_index)
             if(link_down_status == 0)//下游不允许进入
             {
                 //停止
-                comm_node_new.rw_flag = 1;
-                comm_node_new.inverter_no = photo_index+1;
-                comm_node_new.speed_gear = 0;
-                comm_node_new.comm_interval = 10;
-                comm_node_new.comm_retry = 3;
-                AddUartSendData2Queue(comm_node_new);
+                if ((photo_index == 0) || (photo_index == 1)) {
+                    comm_node_new.rw_flag = 1;
+                    comm_node_new.inverter_no = 1;
+                    comm_node_new.speed_gear = 0;
+                    comm_node_new.comm_interval = 10;
+                    comm_node_new.comm_retry = 3;
+                    AddUartSendData2Queue(comm_node_new);
+                    AddUartSendData2Queue(comm_node_new);
+                    comm_node_new.rw_flag = 1;
+                    comm_node_new.inverter_no = 2;
+                    comm_node_new.speed_gear = 0;
+                    comm_node_new.comm_interval = 500;
+                    comm_node_new.comm_retry = 3;
+                    AddUartSendData2Queue(comm_node_new);
+                    AddUartSendData2Queue(comm_node_new);
+                    upload_600ms = 600;
+
+                }
+                else {
+                    comm_node_new.rw_flag = 1;
+                    comm_node_new.inverter_no = photo_index + 1;
+                    comm_node_new.speed_gear = 0;
+                    comm_node_new.comm_interval = 10;
+                    comm_node_new.comm_retry = 3;
+                    AddUartSendData2Queue(comm_node_new);
+
+                }
             }
         }
     }

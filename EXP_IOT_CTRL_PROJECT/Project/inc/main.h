@@ -39,6 +39,10 @@
 void Time_Update(void);
 void Delay(uint32_t nCount);
 
+
+#define INVALUE    0
+#define VALUE      1
+
 /* ETHERNET errors */
 #define  ETH_ERROR              ((uint32_t)0)
 #define  ETH_SUCCESS            ((uint32_t)1)
@@ -156,6 +160,12 @@ void DEBUG_process(u8 *p_data, u16 len);
 extern u8  heart_dely;
 extern u8  local_station;
 extern u8  isHost;
+
+extern u16 upload_600ms;
+
+extern u16 upload_600ms_3;
+extern u16 upload_600ms_2;
+extern u16 upload_600ms_1;
 
 extern u8  mac_addr[6];
 
