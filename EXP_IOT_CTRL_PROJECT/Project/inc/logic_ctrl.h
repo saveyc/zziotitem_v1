@@ -92,6 +92,7 @@ typedef struct {
     u16 speed_gear;      //写入速度的档位
     u16 comm_interval;   //通讯间隔时间
     u16 comm_retry;      //通讯重试次数
+    u16 value;           //是否有效
 }COMM_NODE_T;
 
 typedef struct {
@@ -161,5 +162,8 @@ void Linkage_stream_extra_signal(u8 inverter_index, u8 start_flag);
 void logic_upstream_io_allow_output(void);
 
 u8 get_inverter_fault_status(INVERTER_STATUS_T inverter_status);
+
+void logic_uarttmp_init(void);
+void logic_cycle_decrease(void);
 
 #endif

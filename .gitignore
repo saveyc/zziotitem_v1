@@ -39,6 +39,7 @@ Module.symvers
 
 #add persional
 */.vs/*
+.vs/*
 
 #
 # Top-level generic files

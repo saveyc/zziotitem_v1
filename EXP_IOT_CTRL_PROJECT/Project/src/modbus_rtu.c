@@ -127,7 +127,7 @@ void uart1_send(void)
     UART1_RX_485;
     uart1_commu_state = RECV_DATA;
     uart1_recv_count = 0;
-    uart1_tmr = 50;
+    uart1_tmr = 35;
 }
 void Modbus_RTU_Write_Single_Reg_Cmd(u16 reg_addr,u16 data)
 {
@@ -506,18 +506,62 @@ void Modbus_RTU_Comm_Process(void)
         else
         {
             comm_node = *comm_node_tmp;
-            if (comm_node.comm_interval == 0) {
-                comm_node.comm_interval = 15;
+            //if (comm_node.comm_interval == 0) {
+            //    comm_node.comm_interval = 15;
+            //}
+
+            if ((comm_node.inverter_no == 4) && (comm_node.speed_gear != 0) && (comm_node.rw_flag == 1)) {
+                if (((inverter_status_buffer[4].fault_code >> 4) & 0x1) == 0) {
+                    return;
+                }
             }
+            if ((upload_600ms != 0) && (comm_node.inverter_no == 4) && (comm_node.speed_gear != 0) && (comm_node.rw_flag == 1))
+            {
+                return;
+            }
+
+            if ((comm_node.inverter_no == 3) && (comm_node.speed_gear != 0) && (comm_node.rw_flag == 1)) {
+                if (((inverter_status_buffer[3].fault_code >> 4) & 0x1) == 0) {
+                    return;
+                }
+            }
+            if ((upload_600ms_3 != 0) && (comm_node.inverter_no == 3) && (comm_node.speed_gear != 0) && (comm_node.rw_flag == 1))
+            {
+                return;
+            }
+
+            if ((comm_node.inverter_no == 2) && (comm_node.speed_gear != 0) && (comm_node.rw_flag == 1)) {
+                if (((inverter_status_buffer[2].fault_code >> 4) & 0x1) == 0) {
+                    return;
+                }
+            }
+            if ((upload_600ms_2 != 0) && (comm_node.inverter_no == 2) && (comm_node.speed_gear != 0) && (comm_node.rw_flag == 1))
+            {
+                return;
+            }
+
+            if ((comm_node.inverter_no == 1) && (comm_node.speed_gear != 0) && (comm_node.rw_flag == 1)) {
+                if (((inverter_status_buffer[1].fault_code >> 4) & 0x1) == 0) {
+                    return;
+                }
+            }
+            if ((upload_600ms_1 != 0) && (comm_node.inverter_no == 1) && (comm_node.speed_gear != 0) && (comm_node.rw_flag == 1))
+            {
+                return;
+            }
+
+            comm_node.comm_interval = 2;
 
             comm_busy_flag = 1;
             uart1_commu_state = SEND_READY;
+            comm_node.comm_retry = 2;
         }
     }
     else
     {
         if(uart1_commu_state == SEND_DATA)
         {
+
             comm_send_rw_comand();
         }
         else if(uart1_commu_state == RECV_DATA_END)
@@ -532,7 +576,7 @@ void Modbus_RTU_Comm_Process(void)
                 if(comm_node.comm_retry > 0)
                 {
                     comm_node.comm_retry--;
-                    comm_node.comm_interval = 20;
+                    comm_node.comm_interval = 2;
                     uart1_commu_state = SEND_READY;
                 }
                 else
