@@ -1,0 +1,26 @@
+2021-10-22 19:55:37,194 ERROR 连接IOT
+System.Net.Sockets.SocketException (0x80004005): 通常每个套接字地址(协议/网络地址/端口)只允许使用一次。
+   在 System.Net.Sockets.Socket.DoBind(EndPoint endPointSnapshot, SocketAddress socketAddress)
+   在 System.Net.Sockets.Socket.Bind(EndPoint localEP)
+   在 Utilities.Network.UDPClient.Connect(Boolean canReceive) 位置 D:\programming\Wayzim\CommonUtilities\Utilities2\Utilities\Network\UDPClient.cs:行号 83
+   在 Utilities.Network.UDPClient.Connect() 位置 D:\programming\Wayzim\CommonUtilities\Utilities2\Utilities\Network\UDPClient.cs:行号 66
+   在 IoTToolkit.IoTCommunicator.Connect() 位置 D:\programming\Wayzim\CommonUtilities\IoTToolkit\IoTToolkit\IoTCommunicator.cs:行号 42
+   在 IoTToolkit.IoTToolkitVM.ConnectCmdEx() 位置 D:\programming\Wayzim\CommonUtilities\IoTToolkit\IoTToolkit\IoTToolkitVM.cs:行号 91
+   在 Utilities.Windows.SimpleCommand.ExecuteCore(Object parameter) 位置 D:\programming\Wayzim\CommonUtilities\Utilities2\Utilities\Windows\SimpleCommand.cs:行号 153
+   在 Utilities.Windows.SimpleCommand.Execute(Object parameter) 位置 D:\programming\Wayzim\CommonUtilities\Utilities2\Utilities\Windows\SimpleCommand.cs:行号 134
+2021-10-22 19:55:56,138 ERROR 读取参数
+IoTToolkit.ReplyTimeoutException: 等待回复超时
+   在 IoTToolkit.IoTCommunicator.SendCommand(IoTCommand command, Int32 retryTimes, Nullable`1 timeout, Boolean throwTimeout) 位置 D:\programming\Wayzim\CommonUtilities\IoTToolkit\IoTToolkit\IoTCommunicator.cs:行号 177
+   在 IoTToolkit.IoTCommunicator.SendCommand(CommandType type, Byte[] data, Int32 retryTimes, Nullable`1 timeout, Boolean throwTimeout) 位置 D:\programming\Wayzim\CommonUtilities\IoTToolkit\IoTToolkit\IoTCommunicator.cs:行号 151
+   在 IoTToolkit.IoTCommunicator.ReadParameter(UInt16 stationNo) 位置 D:\programming\Wayzim\CommonUtilities\IoTToolkit\IoTToolkit\IoTCommunicator.cs:行号 57
+   在 IoTToolkit.IoTToolkitVM.ReadParameterCmdEx() 位置 D:\programming\Wayzim\CommonUtilities\IoTToolkit\IoTToolkit\IoTToolkitVM.cs:行号 132
+   在 Utilities.Windows.SimpleCommand.ExecuteCore(Object parameter) 位置 D:\programming\Wayzim\CommonUtilities\Utilities2\Utilities\Windows\SimpleCommand.cs:行号 153
+   在 Utilities.Windows.SimpleCommand.Execute(Object parameter) 位置 D:\programming\Wayzim\CommonUtilities\Utilities2\Utilities\Windows\SimpleCommand.cs:行号 134
+2021-10-22 19:59:51,677 ERROR 读取参数
+IoTToolkit.ReplyTimeoutException: 等待回复超时
+   在 IoTToolkit.IoTCommunicator.SendCommand(IoTCommand command, Int32 retryTimes, Nullable`1 timeout, Boolean throwTimeout) 位置 D:\programming\Wayzim\CommonUtilities\IoTToolkit\IoTToolkit\IoTCommunicator.cs:行号 177
+   在 IoTToolkit.IoTCommunicator.SendCommand(CommandType type, Byte[] data, Int32 retryTimes, Nullable`1 timeout, Boolean throwTimeout) 位置 D:\programming\Wayzim\CommonUtilities\IoTToolkit\IoTToolkit\IoTCommunicator.cs:行号 151
+   在 IoTToolkit.IoTCommunicator.ReadParameter(UInt16 stationNo) 位置 D:\programming\Wayzim\CommonUtilities\IoTToolkit\IoTToolkit\IoTCommunicator.cs:行号 57
+   在 IoTToolkit.IoTToolkitVM.ReadParameterCmdEx() 位置 D:\programming\Wayzim\CommonUtilities\IoTToolkit\IoTToolkit\IoTToolkitVM.cs:行号 132
+   在 Utilities.Windows.SimpleCommand.ExecuteCore(Object parameter) 位置 D:\programming\Wayzim\CommonUtilities\Utilities2\Utilities\Windows\SimpleCommand.cs:行号 153
+   在 Utilities.Windows.SimpleCommand.Execute(Object parameter) 位置 D:\programming\Wayzim\CommonUtilities\Utilities2\Utilities\Windows\SimpleCommand.cs:行号 134

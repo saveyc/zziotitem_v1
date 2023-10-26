@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<Workspace>
+  <ConfigDictionary>
+    
+  <CurrentConfigs><Project>Project/STM3210C-EVAL</Project></CurrentConfigs></ConfigDictionary>
+  <Desktop>
+    <Static>
+      <Workspace>
+        <ColumnWidths>
+          
+          
+          
+          
+        <Column0>234</Column0><Column1>27</Column1><Column2>27</Column2><Column3>27</Column3></ColumnWidths>
+      </Workspace>
+      <Build>
+        
+        
+        
+        
+      <ColumnWidth0>20</ColumnWidth0><ColumnWidth1>765</ColumnWidth1><ColumnWidth2>204</ColumnWidth2><ColumnWidth3>51</ColumnWidth3></Build>
+      <Debug-Log>
+        
+        
+      <ColumnWidth0>20</ColumnWidth0><ColumnWidth1>1021</ColumnWidth1></Debug-Log>
+      <TerminalIO/>
+    <Find-in-Files><ColumnWidth0>370</ColumnWidth0><ColumnWidth1>52</ColumnWidth1><ColumnWidth2>634</ColumnWidth2></Find-in-Files></Static>
+    <Windows>
+      
+      
+    <Wnd2>
+        <Tabs>
+          <Tab>
+            <Identity>TabID-20961-1255</Identity>
+            <TabName>Workspace</TabName>
+            <Factory>Workspace</Factory>
+            <Session>
+              
+            <NodeDict><ExpandedNode>Project</ExpandedNode><ExpandedNode>Project/User</ExpandedNode><ExpandedNode>Project/User/netconf.c</ExpandedNode></NodeDict></Session>
+          </Tab>
+        </Tabs>
+        
+      <SelectedTab>0</SelectedTab></Wnd2><Wnd3>
+        <Tabs>
+          <Tab>
+            <Identity>TabID-30100-2721</Identity>
+            <TabName>Build</TabName>
+            <Factory>Build</Factory>
+            <Session/>
+          </Tab>
+          <Tab>
+            <Identity>TabID-761-2862</Identity>
+            <TabName>Debug Log</TabName>
+            <Factory>Debug-Log</Factory>
+            <Session/>
+          </Tab>
+        <Tab><Identity>TabID-21791-18367</Identity><TabName>Find in Files</TabName><Factory>Find-in-Files</Factory><Session/></Tab></Tabs>
+        
+      <SelectedTab>0</SelectedTab></Wnd3></Windows>
+    <Editor>
+      
+      
+      
+      
+    <Pane><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\..\inc\fun.h</Filename><XPos>0</XPos><YPos>0</YPos><SelStart>295</SelStart><SelEnd>295</SelEnd></Tab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\..\..\Libraries\CMSIS\Core\CM3\core_cm3.h</Filename><XPos>0</XPos><YPos>0</YPos><SelStart>0</SelStart><SelEnd>0</SelEnd></Tab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\..\inc\udpclient.h</Filename><XPos>0</XPos><YPos>0</YPos><SelStart>126</SelStart><SelEnd>144</SelEnd></Tab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\..\inc\can_bus.h</Filename><XPos>0</XPos><YPos>21</YPos><SelStart>734</SelStart><SelEnd>740</SelEnd></Tab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\..\..\Utilities\lwip-1.3.1\src\core\tcp_out.c</Filename><XPos>0</XPos><YPos>443</YPos><SelStart>16116</SelStart><SelEnd>16116</SelEnd></Tab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\..\..\Utilities\lwip-1.3.1\src\core\memp.c</Filename><XPos>0</XPos><YPos>269</YPos><SelStart>8397</SelStart><SelEnd>8397</SelEnd></Tab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\..\..\Utilities\lwip-1.3.1\port\ethernetif.c</Filename><XPos>0</XPos><YPos>191</YPos><SelStart>6330</SelStart><SelEnd>6330</SelEnd></Tab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\..\src\netconf.c</Filename><XPos>0</XPos><YPos>127</YPos><SelStart>4511</SelStart><SelEnd>4511</SelEnd></Tab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\..\src\logic_ctrl.c</Filename><XPos>0</XPos><YPos>292</YPos><SelStart>10093</SelStart><SelEnd>10093</SelEnd></Tab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\..\..\Libraries\STM32_ETH_Driver\src\stm32_eth.c</Filename><XPos>0</XPos><YPos>1535</YPos><SelStart>61430</SelStart><SelEnd>61430</SelEnd></Tab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\..\src\can_bus.c</Filename><XPos>0</XPos><YPos>326</YPos><SelStart>11087</SelStart><SelEnd>11087</SelEnd></Tab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\..\inc\logic_ctrl.h</Filename><XPos>0</XPos><YPos>12</YPos><SelStart>793</SelStart><SelEnd>793</SelEnd></Tab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\..\src\stm32f107.c</Filename><XPos>0</XPos><YPos>148</YPos><SelStart>6569</SelStart><SelEnd>6569</SelEnd></Tab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\..\src\modbus_rtu.c</Filename><XPos>0</XPos><YPos>73</YPos><SelStart>3719</SelStart><SelEnd>3719</SelEnd></Tab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\..\src\speedCtrl.c</Filename><XPos>0</XPos><YPos>49</YPos><SelStart>1621</SelStart><SelEnd>1621</SelEnd></Tab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\..\..\Utilities\lwip-1.3.1\src\include\ipv4\lwip\ip_addr.h</Filename><XPos>0</XPos><YPos>62</YPos><SelStart>2581</SelStart><SelEnd>2581</SelEnd></Tab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\..\..\Utilities\lwip-1.3.1\src\core\udp.c</Filename><XPos>0</XPos><YPos>657</YPos><SelStart>23619</SelStart><SelEnd>23619</SelEnd></Tab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\..\inc\main.h</Filename><XPos>0</XPos><YPos>54</YPos><SelStart>1891</SelStart><SelEnd>1891</SelEnd></Tab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\..\src\fun.c</Filename><XPos>0</XPos><YPos>64</YPos><SelStart>1629</SelStart><SelEnd>1629</SelEnd></Tab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\..\src\stm32f10x_it.c</Filename><XPos>0</XPos><YPos>152</YPos><SelStart>4391</SelStart><SelEnd>4391</SelEnd></Tab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\..\src\udpclient.c</Filename><XPos>0</XPos><YPos>83</YPos><SelStart>3160</SelStart><SelEnd>3160</SelEnd></Tab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\..\src\main.c</Filename><XPos>0</XPos><YPos>190</YPos><SelStart>5441</SelStart><SelEnd>5441</SelEnd></Tab><ActiveTab>21</ActiveTab></Pane><ActivePane>0</ActivePane><Sizes><Pane><X>1000000</X><Y>1000000</Y></Pane></Sizes><SplitMode>1</SplitMode></Editor>
+    <Positions>
+      
+      
+      
+      
+      
+    <Top><Row0><Sizes><Toolbar-04ce1d30><key>iaridepm.enu1</key></Toolbar-04ce1d30></Sizes></Row0></Top><Left><Row0><Sizes><Wnd2><Rect><Top>-2</Top><Left>-2</Left><Bottom>479</Bottom><Right>325</Right><x>-2</x><y>-2</y><xscreen>154</xscreen><yscreen>126</yscreen><sizeHorzCX>112738</sizeHorzCX><sizeHorzCY>183942</sizeHorzCY><sizeVertCX>239385</sizeVertCX><sizeVertCY>702190</sizeVertCY></Rect></Wnd2></Sizes></Row0></Left><Right><Row0><Sizes/></Row0></Right><Bottom><Row0><Sizes><Wnd3><Rect><Top>-2</Top><Left>-2</Left><Bottom>161</Bottom><Right>1368</Right><x>-2</x><y>-2</y><xscreen>1370</xscreen><yscreen>163</yscreen><sizeHorzCX>1002928</sizeHorzCX><sizeHorzCY>237956</sizeHorzCY><sizeVertCX>112738</sizeVertCX><sizeVertCY>183942</sizeVertCY></Rect></Wnd3></Sizes></Row0></Bottom><Float><Sizes/></Float></Positions>
+  </Desktop>
+</Workspace>
+
+

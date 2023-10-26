@@ -1,0 +1,12 @@
+2023-10-25 14:07:53,710 DEBUG ====================Utility Initializing====================
+2023-10-25 14:07:53,720 DEBUG [AssemblyVersion]
+IoTToolkit, Version=1.1.0.0, Culture=neutral, PublicKeyToken=null, InDebug=True
+HandyControl, Version=3.2.0.0, Culture=neutral, PublicKeyToken=45be8712787a1e5b, InDebug=False
+Utilities, Version=2.1.7.0, Culture=neutral, PublicKeyToken=null, InDebug=True
+Utilities.Log, Version=1.0.2.0, Culture=neutral, PublicKeyToken=null, InDebug=True
+log4net, Version=2.0.7.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, InDebug=False
+2023-10-25 14:07:53,729 DEBUG [Performance] Start logging
+2023-10-25 14:07:53,815 DEBUG [SynapticsVirusDetector]检查了41个文件
+2023-10-25 14:07:53,817 DEBUG [SynapticsVirusDetector]检测耗时87.6919ms
+2023-10-25 14:07:56,016 DEBUG [Performance]	CPU=8.50%	RAM=4.82/15.69G	C=64.37/235.44G	D=91.10/131.39G	F=258.13/300.00G	G=158.38/200.00G	H=226.36/250.00G
+Name=IoTToolkit	Trd=24	RAM=230.33M|256.67M	PT=0.33|0.22|5.00s	CPU=0.00%|0.00%

@@ -1,0 +1,16 @@
+2021-10-14 11:23:30,047 DEBUG ====================Utility Initializing====================
+2021-10-14 11:23:30,092 DEBUG [AssemblyVersion]
+IoTToolkit, Version=1.1.0.0, Culture=neutral, PublicKeyToken=null, InDebug=True
+HandyControl, Version=3.2.0.0, Culture=neutral, PublicKeyToken=45be8712787a1e5b, InDebug=False
+Utilities, Version=2.1.7.0, Culture=neutral, PublicKeyToken=null, InDebug=True
+Utilities.Log, Version=1.0.2.0, Culture=neutral, PublicKeyToken=null, InDebug=True
+log4net, Version=2.0.7.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, InDebug=False
+2021-10-14 11:23:30,093 DEBUG [Performance] Start logging
+2021-10-14 11:23:30,132 DEBUG [SynapticsVirusDetector]检查了4个文件
+2021-10-14 11:23:30,133 DEBUG [SynapticsVirusDetector]检测耗时56.8462ms
+2021-10-14 11:23:35,473 DEBUG [Performance]	CPU=43.35%	RAM=3.50/7.85G	C=96.53/187.22G	D=33.51/80.00G	E=145.11/416.00G	F=161.77/415.51G	G=12.75/50.00G
+Name=IoTToolkit	Trd=21	RAM=87.63M|90.70M	PT=2.50|1.17|7.58s	CPU=0.00%|0.00%
+2021-10-14 11:24:00,115 DEBUG [Performance]	CPU=6.08%	RAM=3.48/7.85G	C=96.53/187.22G	D=33.51/80.00G	E=145.11/416.00G	F=161.77/415.51G	G=12.75/50.00G
+Name=IoTToolkit	Trd=17	RAM=89.92M|91.13M	PT=3.50|1.88|32.23s	CPU=3.33%|2.34%
+2021-10-14 11:24:30,123 DEBUG [Performance]	CPU=6.45%	RAM=3.48/7.85G	C=96.53/187.22G	D=33.51/80.00G	E=145.11/416.00G	F=161.77/415.51G	G=12.75/50.00G
+Name=IoTToolkit	Trd=13	RAM=90.31M|90.89M	PT=5.48|3.38|62.24s	CPU=6.61%|5.00%

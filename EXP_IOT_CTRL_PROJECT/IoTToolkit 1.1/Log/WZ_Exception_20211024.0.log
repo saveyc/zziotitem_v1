@@ -1,0 +1,45 @@
+2021-10-24 16:52:38,244 ERROR 写入参数
+IoTToolkit.ReplyTimeoutException: 等待回复超时
+   在 IoTToolkit.IoTCommunicator.SendCommand(IoTCommand command, Int32 retryTimes, Nullable`1 timeout, Boolean throwTimeout) 位置 D:\programming\Wayzim\CommonUtilities\IoTToolkit\IoTToolkit\IoTCommunicator.cs:行号 177
+   在 IoTToolkit.IoTCommunicator.SendCommand(CommandType type, Byte[] data, Int32 retryTimes, Nullable`1 timeout, Boolean throwTimeout) 位置 D:\programming\Wayzim\CommonUtilities\IoTToolkit\IoTToolkit\IoTCommunicator.cs:行号 151
+   在 IoTToolkit.IoTCommunicator.WriteParameter(IoTParameter parameter) 位置 D:\programming\Wayzim\CommonUtilities\IoTToolkit\IoTToolkit\IoTCommunicator.cs:行号 63
+   在 IoTToolkit.IoTToolkitVM.WriteParameterCmdEx() 位置 D:\programming\Wayzim\CommonUtilities\IoTToolkit\IoTToolkit\IoTToolkitVM.cs:行号 116
+   在 Utilities.Windows.SimpleCommand.ExecuteCore(Object parameter) 位置 D:\programming\Wayzim\CommonUtilities\Utilities2\Utilities\Windows\SimpleCommand.cs:行号 153
+   在 Utilities.Windows.SimpleCommand.Execute(Object parameter) 位置 D:\programming\Wayzim\CommonUtilities\Utilities2\Utilities\Windows\SimpleCommand.cs:行号 134
+2021-10-24 16:52:57,625 ERROR 写入参数
+IoTToolkit.ReplyTimeoutException: 等待回复超时
+   在 IoTToolkit.IoTCommunicator.SendCommand(IoTCommand command, Int32 retryTimes, Nullable`1 timeout, Boolean throwTimeout) 位置 D:\programming\Wayzim\CommonUtilities\IoTToolkit\IoTToolkit\IoTCommunicator.cs:行号 177
+   在 IoTToolkit.IoTCommunicator.SendCommand(CommandType type, Byte[] data, Int32 retryTimes, Nullable`1 timeout, Boolean throwTimeout) 位置 D:\programming\Wayzim\CommonUtilities\IoTToolkit\IoTToolkit\IoTCommunicator.cs:行号 151
+   在 IoTToolkit.IoTCommunicator.WriteParameter(IoTParameter parameter) 位置 D:\programming\Wayzim\CommonUtilities\IoTToolkit\IoTToolkit\IoTCommunicator.cs:行号 63
+   在 IoTToolkit.IoTToolkitVM.WriteParameterCmdEx() 位置 D:\programming\Wayzim\CommonUtilities\IoTToolkit\IoTToolkit\IoTToolkitVM.cs:行号 116
+   在 Utilities.Windows.SimpleCommand.ExecuteCore(Object parameter) 位置 D:\programming\Wayzim\CommonUtilities\Utilities2\Utilities\Windows\SimpleCommand.cs:行号 153
+   在 Utilities.Windows.SimpleCommand.Execute(Object parameter) 位置 D:\programming\Wayzim\CommonUtilities\Utilities2\Utilities\Windows\SimpleCommand.cs:行号 134
+2021-10-24 17:07:27,168 ERROR 写入参数
+IoTToolkit.ReplyTimeoutException: 等待回复超时
+   在 IoTToolkit.IoTCommunicator.SendCommand(IoTCommand command, Int32 retryTimes, Nullable`1 timeout, Boolean throwTimeout) 位置 D:\programming\Wayzim\CommonUtilities\IoTToolkit\IoTToolkit\IoTCommunicator.cs:行号 177
+   在 IoTToolkit.IoTCommunicator.SendCommand(CommandType type, Byte[] data, Int32 retryTimes, Nullable`1 timeout, Boolean throwTimeout) 位置 D:\programming\Wayzim\CommonUtilities\IoTToolkit\IoTToolkit\IoTCommunicator.cs:行号 151
+   在 IoTToolkit.IoTCommunicator.WriteParameter(IoTParameter parameter) 位置 D:\programming\Wayzim\CommonUtilities\IoTToolkit\IoTToolkit\IoTCommunicator.cs:行号 63
+   在 IoTToolkit.IoTToolkitVM.WriteParameterCmdEx() 位置 D:\programming\Wayzim\CommonUtilities\IoTToolkit\IoTToolkit\IoTToolkitVM.cs:行号 116
+   在 Utilities.Windows.SimpleCommand.ExecuteCore(Object parameter) 位置 D:\programming\Wayzim\CommonUtilities\Utilities2\Utilities\Windows\SimpleCommand.cs:行号 153
+   在 Utilities.Windows.SimpleCommand.Execute(Object parameter) 位置 D:\programming\Wayzim\CommonUtilities\Utilities2\Utilities\Windows\SimpleCommand.cs:行号 134
+2021-10-24 17:16:56,340 ERROR 写入参数
+IoTToolkit.ReplyTimeoutException: 等待回复超时
+   在 IoTToolkit.IoTCommunicator.SendCommand(IoTCommand command, Int32 retryTimes, Nullable`1 timeout, Boolean throwTimeout) 位置 D:\programming\Wayzim\CommonUtilities\IoTToolkit\IoTToolkit\IoTCommunicator.cs:行号 177
+   在 IoTToolkit.IoTCommunicator.SendCommand(CommandType type, Byte[] data, Int32 retryTimes, Nullable`1 timeout, Boolean throwTimeout) 位置 D:\programming\Wayzim\CommonUtilities\IoTToolkit\IoTToolkit\IoTCommunicator.cs:行号 151
+   在 IoTToolkit.IoTCommunicator.WriteParameter(IoTParameter parameter) 位置 D:\programming\Wayzim\CommonUtilities\IoTToolkit\IoTToolkit\IoTCommunicator.cs:行号 63
+   在 IoTToolkit.IoTToolkitVM.WriteParameterCmdEx() 位置 D:\programming\Wayzim\CommonUtilities\IoTToolkit\IoTToolkit\IoTToolkitVM.cs:行号 116
+   在 Utilities.Windows.SimpleCommand.ExecuteCore(Object parameter) 位置 D:\programming\Wayzim\CommonUtilities\Utilities2\Utilities\Windows\SimpleCommand.cs:行号 153
+   在 Utilities.Windows.SimpleCommand.Execute(Object parameter) 位置 D:\programming\Wayzim\CommonUtilities\Utilities2\Utilities\Windows\SimpleCommand.cs:行号 134
+2021-10-24 17:17:04,771 ERROR 写入参数
+IoTToolkit.ReplyTimeoutException: 等待回复超时
+   在 IoTToolkit.IoTCommunicator.SendCommand(IoTCommand command, Int32 retryTimes, Nullable`1 timeout, Boolean throwTimeout) 位置 D:\programming\Wayzim\CommonUtilities\IoTToolkit\IoTToolkit\IoTCommunicator.cs:行号 177
+   在 IoTToolkit.IoTCommunicator.SendCommand(CommandType type, Byte[] data, Int32 retryTimes, Nullable`1 timeout, Boolean throwTimeout) 位置 D:\programming\Wayzim\CommonUtilities\IoTToolkit\IoTToolkit\IoTCommunicator.cs:行号 151
+   在 IoTToolkit.IoTCommunicator.WriteParameter(IoTParameter parameter) 位置 D:\programming\Wayzim\CommonUtilities\IoTToolkit\IoTToolkit\IoTCommunicator.cs:行号 63
+   在 IoTToolkit.IoTToolkitVM.WriteParameterCmdEx() 位置 D:\programming\Wayzim\CommonUtilities\IoTToolkit\IoTToolkit\IoTToolkitVM.cs:行号 116
+   在 Utilities.Windows.SimpleCommand.ExecuteCore(Object parameter) 位置 D:\programming\Wayzim\CommonUtilities\Utilities2\Utilities\Windows\SimpleCommand.cs:行号 153
+   在 Utilities.Windows.SimpleCommand.Execute(Object parameter) 位置 D:\programming\Wayzim\CommonUtilities\Utilities2\Utilities\Windows\SimpleCommand.cs:行号 134
+2021-10-24 17:17:16,881 ERROR 'CommunicationFailed' []
+System.Net.Sockets.SocketException (0x80004005): 一个封锁操作被对 WSACancelBlockingCall 的调用中断。
+   在 System.Net.Sockets.Socket.ReceiveFrom(Byte[] buffer, Int32 offset, Int32 size, SocketFlags socketFlags, EndPoint& remoteEP)
+   在 System.Net.Sockets.Socket.ReceiveFrom(Byte[] buffer, EndPoint& remoteEP)
+   在 Utilities.Network.UDPClient.ReceiveMsg() 位置 D:\programming\Wayzim\CommonUtilities\Utilities2\Utilities\Network\UDPClient.cs:行号 116

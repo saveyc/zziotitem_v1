@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<Workspace>
+  <ConfigDictionary>
+    
+  <CurrentConfigs><Project>Project/STM3210C-EVAL</Project></CurrentConfigs></ConfigDictionary>
+  <Desktop>
+    <Static>
+      <Workspace>
+        <ColumnWidths>
+          
+          
+          
+          
+        <Column0>253</Column0><Column1>27</Column1><Column2>27</Column2><Column3>27</Column3></ColumnWidths>
+      </Workspace>
+      <Build>
+        
+        
+        
+        
+      <ColumnWidth0>20</ColumnWidth0><ColumnWidth1>765</ColumnWidth1><ColumnWidth2>204</ColumnWidth2><ColumnWidth3>51</ColumnWidth3></Build>
+      <Debug-Log>
+        
+        
+      <ColumnWidth0>20</ColumnWidth0><ColumnWidth1>1021</ColumnWidth1></Debug-Log>
+      <TerminalIO/>
+    <Find-in-Files><ColumnWidth0>370</ColumnWidth0><ColumnWidth1>52</ColumnWidth1><ColumnWidth2>634</ColumnWidth2></Find-in-Files><Disassembly><MixedMode>1</MixedMode><CodeCovShow>1</CodeCovShow><InstrProfShow>1</InstrProfShow></Disassembly></Static>
+    <Windows>
+      
+      
+    <Wnd0>
+        <Tabs>
+          <Tab>
+            <Identity>TabID-20961-1255</Identity>
+            <TabName>Workspace</TabName>
+            <Factory>Workspace</Factory>
+            <Session>
+              
+            <NodeDict><ExpandedNode>Project</ExpandedNode><ExpandedNode>Project/User</ExpandedNode></NodeDict></Session>
+          </Tab>
+        </Tabs>
+        
+      <SelectedTab>0</SelectedTab></Wnd0><Wnd1>
+        <Tabs>
+          <Tab>
+            <Identity>TabID-30100-2721</Identity>
+            <TabName>Build</TabName>
+            <Factory>Build</Factory>
+            <Session/>
+          </Tab>
+          <Tab>
+            <Identity>TabID-761-2862</Identity>
+            <TabName>Debug Log</TabName>
+            <Factory>Debug-Log</Factory>
+            <Session/>
+          </Tab>
+        <Tab><Identity>TabID-21791-18367</Identity><TabName>Find in Files</TabName><Factory>Find-in-Files</Factory><Session/></Tab></Tabs>
+        
+      <SelectedTab>0</SelectedTab></Wnd1></Windows>
+    <Editor>
+      
+      
+      
+      
+    <Pane><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\..\inc\fun.h</Filename><XPos>0</XPos><YPos>0</YPos><SelStart>492</SelStart><SelEnd>492</SelEnd></Tab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\..\inc\stm32f107.h</Filename><XPos>0</XPos><YPos>21</YPos><SelStart>1525</SelStart><SelEnd>1525</SelEnd></Tab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\..\inc\main.h</Filename><XPos>0</XPos><YPos>101</YPos><SelStart>4132</SelStart><SelEnd>4132</SelEnd></Tab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\..\src\stm32f107.c</Filename><XPos>0</XPos><YPos>485</YPos><SelStart>19873</SelStart><SelEnd>19873</SelEnd></Tab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\..\inc\can_bus.h</Filename><XPos>0</XPos><YPos>35</YPos><SelStart>882</SelStart><SelEnd>882</SelEnd></Tab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\..\src\fun.c</Filename><XPos>0</XPos><YPos>0</YPos><SelStart>430</SelStart><SelEnd>430</SelEnd></Tab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\..\src\netconf.c</Filename><XPos>0</XPos><YPos>0</YPos><SelStart>4037</SelStart><SelEnd>4037</SelEnd></Tab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\..\..\Libraries\STM32_ETH_Driver\src\stm32_eth.c</Filename><XPos>0</XPos><YPos>724</YPos><SelStart>32906</SelStart><SelEnd>32906</SelEnd></Tab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\..\..\Utilities\lwip-1.3.1\port\ethernetif.c</Filename><XPos>0</XPos><YPos>57</YPos><SelStart>2500</SelStart><SelEnd>2500</SelEnd></Tab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\..\..\Utilities\lwip-1.3.1\src\core\mem.c</Filename><XPos>0</XPos><YPos>173</YPos><SelStart>6532</SelStart><SelEnd>6532</SelEnd></Tab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\..\..\Utilities\lwip-1.3.1\port\tftputils.c</Filename><XPos>0</XPos><YPos>54</YPos><SelStart>1137</SelStart><SelEnd>1137</SelEnd></Tab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\..\inc\udpclient.h</Filename><XPos>0</XPos><YPos>0</YPos><SelStart>126</SelStart><SelEnd>144</SelEnd></Tab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\..\..\Libraries\STM32F10x_StdPeriph_Driver\src\stm32f10x_bkp.c</Filename><XPos>0</XPos><YPos>231</YPos><SelStart>6887</SelStart><SelEnd>6887</SelEnd></Tab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\..\src\main.c</Filename><XPos>0</XPos><YPos>165</YPos><SelStart>4589</SelStart><SelEnd>4589</SelEnd></Tab><ActiveTab>13</ActiveTab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\..\src\can_bus.c</Filename><XPos>0</XPos><YPos>500</YPos><SelStart>14651</SelStart><SelEnd>14651</SelEnd></Tab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\..\..\Utilities\lwip-1.3.1\port\tftpserver.c</Filename><XPos>0</XPos><YPos>519</YPos><SelStart>17773</SelStart><SelEnd>17773</SelEnd></Tab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\..\src\udpclient.c</Filename><XPos>0</XPos><YPos>207</YPos><SelStart>5933</SelStart><SelEnd>5933</SelEnd></Tab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\..\src\stm32f10x_it.c</Filename><XPos>0</XPos><YPos>0</YPos><SelStart>4682</SelStart><SelEnd>4682</SelEnd></Tab></Pane><ActivePane>0</ActivePane><Sizes><Pane><X>1000000</X><Y>1000000</Y></Pane></Sizes><SplitMode>1</SplitMode></Editor>
+    <Positions>
+      
+      
+      
+      
+      
+    <Top><Row0><Sizes><Toolbar-049d1d30><key>iaridepm.enu1</key></Toolbar-049d1d30></Sizes></Row0></Top><Left><Row0><Sizes><Wnd0><Rect><Top>-2</Top><Left>-2</Left><Bottom>547</Bottom><Right>327</Right><x>-2</x><y>-2</y><xscreen>415</xscreen><yscreen>171</yscreen><sizeHorzCX>303807</sizeHorzCX><sizeHorzCY>249635</sizeHorzCY><sizeVertCX>240849</sizeVertCX><sizeVertCY>801460</sizeVertCY></Rect></Wnd0></Sizes></Row0></Left><Right><Row0><Sizes/></Row0></Right><Bottom><Row0><Sizes><Wnd1><Rect><Top>-2</Top><Left>-2</Left><Bottom>93</Bottom><Right>1368</Right><x>-2</x><y>-2</y><xscreen>1370</xscreen><yscreen>95</yscreen><sizeHorzCX>1002928</sizeHorzCX><sizeHorzCY>138686</sizeHorzCY><sizeVertCX>303807</sizeVertCX><sizeVertCY>249635</sizeVertCY></Rect></Wnd1></Sizes></Row0></Bottom><Float><Sizes/></Float></Positions>
+  </Desktop>
+</Workspace>
+
+
