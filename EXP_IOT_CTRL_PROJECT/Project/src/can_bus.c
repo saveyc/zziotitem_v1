@@ -1,5 +1,7 @@
 #include "main.h"
 
+
+
 #define canSendQueueSize  50
 sCanFrameExt canSendQueueBuff[canSendQueueSize];
 sCAN_SEND_QUEUE canSendQueue;
@@ -11,6 +13,8 @@ u16 can_recv_len = 0;
 u8  g_SegPolo = CAN_SEG_POLO_NONE;
 u8  g_SegNum = 0;
 u16 g_SegBytes = 0;
+
+
 
 void InitCanSendQueue(void)
 {
@@ -37,7 +41,7 @@ u8 can_bus_send_one_frame(sCanFrameExt sTxMsg)
 {
     CanTxMsg TxMessage;
     
-    TxMessage.ExtId = (sTxMsg.extId.src_id)|((sTxMsg.extId.func_id&0xF)<<8)|((sTxMsg.extId.seg_num&0xFF)<<12)|((sTxMsg.extId.seg_polo&0x3)<<20);
+    TxMessage.ExtId = (sTxMsg.extId.src_id)|((sTxMsg.extId.func_id&0xF)<<8)|((sTxMsg.extId.seg_num&0xFF)<<12)|((sTxMsg.extId.seg_polo&0x3)<<20) | ((sTxMsg.extId.dst_id & 0x7F) << 22);
     TxMessage.IDE = CAN_ID_EXT;
     TxMessage.RTR = CAN_RTR_DATA;
     TxMessage.DLC = sTxMsg.data_len;
@@ -92,18 +96,21 @@ void module_status_recv_process(u8* pbuf,u16 recv_len,u8 src_id)
     data_len = pbuf[0]|(pbuf[1]>>8);
     belt_num = pbuf[2];
     
-    if(data_len != recv_len || belt_num == 0)
+    if ((data_len != recv_len) || (belt_num == 0)) {
         return;
+    }
+
     module_status_t.station_no = src_id;
     module_status_t.belt_number = belt_num;
     memcpy((u8*)module_status_t.inverter_status,(u8*)(pbuf+3),sizeof(INVERTER_STATUS_T)*belt_num);
     
-    if(isHost)//主站接收从机状态信息
+    if((isHost == 1) && (module_status_t.station_no != 1))//主站接收从机状态信息
     {
         AddModuleStatusData2Queue(module_status_t);
     }
     if(src_id == user_paras_local.Up_Stream_No)
     {
+        //上游启停状态
         g_link_up_stream_status = (module_status_t.inverter_status[belt_num-1].fault_code>>4)&0x1;
     }
     else if(src_id == user_paras_local.Down_Stream_No)
@@ -122,7 +129,10 @@ void module_status_recv_process(u8* pbuf,u16 recv_len,u8 src_id)
                 }
             }
         }
+        //更新下游状态
         g_link_down_stream_status = (module_status_t.inverter_status[0].fault_code>>4)&0x1;
+        // 下游光电有触发过
+        g_link_down_phototrig_status |= (module_status_t.inverter_status[0].input_status >> 7) & 0x1;
     }
 }
 
@@ -130,6 +140,7 @@ void can_bus_frame_receive(CanRxMsg rxMsg)
 {
     sCanFrameExtID extID;
     u8 recv_finish_flag = 0;
+    COMM_NODE_T  comm_node_new;
     
     extID.seg_polo = (rxMsg.ExtId>>20)&0x3;
     extID.seg_num  = (rxMsg.ExtId>>12)&0xFF;
@@ -137,7 +148,7 @@ void can_bus_frame_receive(CanRxMsg rxMsg)
     extID.src_id = rxMsg.ExtId & 0xFF;
     extID.dst_id  = (rxMsg.ExtId>>22)&0x7F;
     
-    if(extID.func_id == CAN_FUNC_ID_BOOT_MODE && extID.dst_id == local_station)
+    if((extID.func_id == CAN_FUNC_ID_BOOT_MODE) && (extID.dst_id == local_station))
     {
         //BKP_WriteBackupRegister(BKP_DR8, 0x55);
         //NVIC_SystemReset();
@@ -150,74 +161,97 @@ void can_bus_frame_receive(CanRxMsg rxMsg)
         FLASH_Lock();
         NVIC_SystemReset();
     }
-    //接收数据
-    if(extID.seg_polo == CAN_SEG_POLO_NONE)
+    
+
+    if (extID.func_id == CAN_FUNC_ID_START_CMD)
     {
-        memcpy(can_recv_buff,rxMsg.Data,rxMsg.DLC);
+        if (rxMsg.Data[0] != 0) {
+            Reset_Ctrl_Handle();                         //有故障先复位故障 不能复位急停
+            reset_start_time_cnt = 0;
+        }
+        Speed_Ctrl_Process(rxMsg.Data[0]);
+    }
+    else if (extID.func_id == CAN_FUNC_ID_RESET_CMD)
+    {
+        Reset_Ctrl_Handle();                         //有故障先复位故障
+        reset_start_time_cnt = 500;
+        g_emergency_stop = 0;                        //复位急停状态
+    }
+    else if (extID.func_id == CAN_FUNC_ID_FUNC_SELECT_CMD)
+    {
+        g_block_disable_flag = rxMsg.Data[0];
+    }
+    else if ((extID.func_id == CAN_FUNC_ID_READ_MODULE_STATUS) && ((extID.src_id == local_station) && (isHost != 1))) {
+        can_bus_send_module_status();
+    }
+    else if (extID.func_id == CAN_FUNC_ID_EMERGENCY_STOP_STATUS) {
+        g_emergency_stop = 1;
+        Speed_Ctrl_Process(EMERGENCY_STOP);
+    }
+    else if ((extID.func_id == CAN_FUNC_ID_UPSTREAM_STOP_CMD) && (extID.src_id == user_paras_local.Down_Stream_No)) {    
+        //下游发了同步停止信号  上游按停止时间停止
+        if (user_paras_local.Belt_Number == 0) {
+            return;
+        }
+        comm_node_new.rw_flag = 1;
+        comm_node_new.inverter_no = user_paras_local.Belt_Number;
+        comm_node_new.speed_gear = 0;
+        comm_node_new.comm_interval = user_paras_local.belt_para[user_paras_local.Belt_Number - 1].Stop_Delay_Time;
+        comm_node_new.comm_retry = 3;
+        AddUartSendData2Queue(comm_node_new);
+    }
+
+    //接收多包数据
+    if (extID.seg_polo == CAN_SEG_POLO_NONE)
+    {
+        memcpy(can_recv_buff, rxMsg.Data, rxMsg.DLC);
         can_recv_len = rxMsg.DLC;
         recv_finish_flag = 1;
     }
-    else if(extID.seg_polo == CAN_SEG_POLO_FIRST)
+    else if (extID.seg_polo == CAN_SEG_POLO_FIRST)
     {
-        memcpy(can_recv_buff,rxMsg.Data,rxMsg.DLC);
-        
+        memcpy(can_recv_buff, rxMsg.Data, rxMsg.DLC);
+
         g_SegPolo = CAN_SEG_POLO_FIRST;
         g_SegNum = extID.seg_num;
         g_SegBytes = rxMsg.DLC;
     }
-    else if(extID.seg_polo == CAN_SEG_POLO_MIDDLE)
+    else if (extID.seg_polo == CAN_SEG_POLO_MIDDLE)
     {
-        if(   (g_SegPolo == CAN_SEG_POLO_FIRST) 
-           && (extID.seg_num == (g_SegNum+1)) 
-           && ((g_SegBytes+rxMsg.DLC) <= CAN_RX_BUFF_SIZE) )
+        if ((g_SegPolo == CAN_SEG_POLO_FIRST)
+            && (extID.seg_num == (g_SegNum + 1))
+            && ((g_SegBytes + rxMsg.DLC) <= CAN_RX_BUFF_SIZE))
         {
-            memcpy(can_recv_buff+g_SegBytes,rxMsg.Data,rxMsg.DLC);
-            
-            g_SegNum ++;
+            memcpy(can_recv_buff + g_SegBytes, rxMsg.Data, rxMsg.DLC);
+
+            g_SegNum++;
             g_SegBytes += rxMsg.DLC;
         }
     }
-    else if(extID.seg_polo == CAN_SEG_POLO_FINAL)
+    else if (extID.seg_polo == CAN_SEG_POLO_FINAL)
     {
-        if(   (g_SegPolo == CAN_SEG_POLO_FIRST) 
-           && (extID.seg_num == (g_SegNum+1)) 
-           && ((g_SegBytes+rxMsg.DLC) <= CAN_RX_BUFF_SIZE) )
+        if ((g_SegPolo == CAN_SEG_POLO_FIRST)
+            && (extID.seg_num == (g_SegNum + 1))
+            && ((g_SegBytes + rxMsg.DLC) <= CAN_RX_BUFF_SIZE))
         {
-            memcpy(can_recv_buff+g_SegBytes,rxMsg.Data,rxMsg.DLC);
+            memcpy(can_recv_buff + g_SegBytes, rxMsg.Data, rxMsg.DLC);
             can_recv_len = g_SegBytes + rxMsg.DLC;
             recv_finish_flag = 1;
-            
+
             g_SegPolo = CAN_SEG_POLO_NONE;
             g_SegNum = 0;
             g_SegBytes = 0;
         }
     }
+
     if(recv_finish_flag != 1) return;
     
-    if((extID.func_id == CAN_FUNC_ID_PARA_DATA) && (extID.src_id == local_station || isHost == 1))
-    {
+    if((extID.func_id == CAN_FUNC_ID_PARA_DATA) && ((extID.src_id == local_station) || (isHost == 1))){
         para_data_recv_process(can_recv_buff,can_recv_len);
     }
-    else if(extID.func_id == CAN_FUNC_ID_START_CMD)
-    {
-        Speed_Ctrl_Process(can_recv_buff[0]);
-    }
-    else if(extID.func_id == CAN_FUNC_ID_MODULE_STATUS)
-    {
+    else if(extID.func_id == CAN_FUNC_ID_MODULE_STATUS){
         module_status_recv_process(can_recv_buff,can_recv_len,extID.src_id);
-    }
-    else if(extID.func_id == CAN_FUNC_ID_RESET_CMD)
-    {
-        Reset_Ctrl_Handle();
-    }
-    else if(extID.func_id == CAN_FUNC_ID_FUNC_SELECT_CMD)
-    {
-        g_block_disable_flag = can_recv_buff[0];
-    }
-    else if((extID.func_id == CAN_FUNC_ID_READ_MODULE_STATUS) && ((extID.src_id == local_station) && (isHost != 1))){
-        can_bus_send_module_status();
-    }
-    
+    }  
 }
 
 void can_bus_send_msg(u8* pbuf, u16 send_tot_len, u8 func_id, u8 src_id)
@@ -305,6 +339,7 @@ void can_bus_reply_write_user_paras(USER_PARAS_T* user_para)
     
     can_bus_send_msg(can_send_buff,can_send_len,CAN_FUNC_ID_PARA_DATA,user_para->Station_No);
 }
+
 void can_bus_send_start_cmd(u8 cmd)
 {
     can_send_len = 1;
@@ -312,6 +347,7 @@ void can_bus_send_start_cmd(u8 cmd)
     
     can_bus_send_msg(can_send_buff,can_send_len,CAN_FUNC_ID_START_CMD,local_station);
 }
+
 void can_bus_send_reset_cmd(void)
 {
     can_send_len = 0;
@@ -325,10 +361,11 @@ void can_bus_send_func_select_cmd(u8* pbuf)
     
     can_bus_send_msg(can_send_buff,can_send_len,CAN_FUNC_ID_FUNC_SELECT_CMD,local_station);
 }
+//
 void can_bus_send_module_status()
 {
-    if(  user_paras_local.Belt_Number == 0 
-      || user_paras_local.Belt_Number > 10 )
+    if(  (user_paras_local.Belt_Number == 0) 
+      || (user_paras_local.Belt_Number > 10) )
     {
         return;
     }
@@ -338,9 +375,35 @@ void can_bus_send_module_status()
     can_send_buff[1] = (can_send_len>>8)&0xFF;
     can_send_buff[2] = user_paras_local.Belt_Number;
     memcpy(can_send_buff+3,(u8*)inverter_status_buffer,sizeof(INVERTER_STATUS_T)*user_paras_local.Belt_Number);
-    
+    //清除 输入触发状态 用于堵包控制
+    inverter_status_buffer[0].input_status &= ~(0x1 << 7);
     can_bus_send_msg(can_send_buff,can_send_len,CAN_FUNC_ID_MODULE_STATUS,local_station);
 }
+
+// 发送急停信号
+void can_bus_send_func_emergency_cmd(void)
+{
+    u8 buf[10] = { 0 };
+    u16 sendlen = 0;
+
+    sendlen = 0;
+
+
+    can_bus_send_msg(buf, sendlen, CAN_FUNC_ID_EMERGENCY_STOP_STATUS, local_station);
+}
+
+//发送上游停止信号
+void can_bus_send_func_upStreamStop_cmd(void)
+{
+    u8 buf[10] = { 0 };
+    u16 sendlen = 0;
+
+    sendlen = 0;
+
+
+    can_bus_send_msg(buf, sendlen, CAN_FUNC_ID_UPSTREAM_STOP_CMD, local_station);
+}
+
 void can_send_frame_process()
 {
     sCAN_SEND_QUEUE *q = &canSendQueue;

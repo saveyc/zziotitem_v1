@@ -49,8 +49,9 @@ u16 modulestate_readcnt = 0;
 u16 modulestate_index = 1;
 
 u16 upload_55ms = 0;
-u16 upload_600ms = 0;
 
+//未用到
+u16 upload_600ms = 0;
 u16 upload_600ms_3 = 0;
 u16 upload_600ms_2 = 0;
 u16 upload_600ms_1 = 0;
@@ -80,6 +81,8 @@ void read_mac_addrs(void)
     mac_addr[4] = (u8) ((Mac_Code >> 8) & 0xFF);
     mac_addr[5] = (u8) ( Mac_Code & 0xFF);
 }
+
+// 识别拨码状态
 void scan_local_station(void)
 {
     u8 tmp, i;
@@ -141,6 +144,7 @@ void sec_process(void)
         {
             heart_dely--;
         }
+
         if( LED_STATE )
         {
             LED_ON;
@@ -149,8 +153,10 @@ void sec_process(void)
         {
             LED_OFF;
         }
+        //堵包检测
         Block_Check_Ctrl_Handle();
     }
+    // 500ms执行一次
     if(half_sec_flag == 1)
     {
         half_sec_flag = 0;
@@ -163,18 +169,21 @@ void sec_process(void)
             module_status_t.belt_number = user_paras_local.Belt_Number;
             memcpy((u8*)module_status_t.inverter_status,(u8*)inverter_status_buffer,sizeof(INVERTER_STATUS_T)*user_paras_local.Belt_Number);
             AddModuleStatusData2Queue(module_status_t);
+            //主站也应该将自己的状态发出去
+            can_bus_send_module_status();
         }
-//        can_bus_send_module_status();
-            if(isHost){
-                if(modulestate_readcnt > 30){
-                      modulestate_readcnt = 0;
-                      modulestate_index++;
-                      can_bus_send_msg(buff,0,CAN_FUNC_ID_READ_MODULE_STATUS,modulestate_index);
-                      if(modulestate_index > 30){
-                      modulestate_index = 1;
-                      }
-                }
+    }
+
+    //轮询询问从机状态
+    if (isHost) {
+        if (modulestate_readcnt > 30) {
+            modulestate_readcnt = 0;
+            modulestate_index++;
+            can_bus_send_msg(buff, 0, CAN_FUNC_ID_READ_MODULE_STATUS, modulestate_index);
+            if (modulestate_index > 20) {
+                modulestate_index = 1;
             }
+        }
     }
     
 }
@@ -196,7 +205,6 @@ int main(void)
     read_mac_addrs();
     read_user_paras();
     logic_uarttmp_init();
-
     /* Infinite loop */
     while (1)
     {
@@ -212,6 +220,11 @@ int main(void)
             }
             else
             {
+                while (ETH_GetRxPktSize() != 0)
+                {
+                    LwIP_Pkt_Handle();
+                }
+
                 LwIP_Periodic_Handle(LocalTime);
                 udp_client_process();
                 send_message_to_server();
@@ -254,7 +267,19 @@ void Time_Update(void)
     upload_runcnt++;
     freq_check_cnt++;
     msone_flag = 1;
+    upload_55ms++;
 
+    modulestate_readcnt++;
+
+    u16 i = 0;
+
+    for (i = 0; i < BELT_NUMMAX; i++) {
+        if (logic_upload_stopStatus[i] != 0) {
+            logic_upload_stopStatus[i]--;
+        }
+    }
+
+    // 1s
     if( sec_reg != 0 )
     {
         sec_reg--;
@@ -264,6 +289,7 @@ void Time_Update(void)
             sec_flag = 1;
         }
     }
+    //500ms
     if(half_sec_reg != 0)
     {
         half_sec_reg--;
@@ -273,6 +299,7 @@ void Time_Update(void)
             half_sec_flag = 1;
         }
     }
+    // reset continue time
     if(reset_start_time_cnt != 0)
     {
         reset_start_time_cnt--;
@@ -281,6 +308,7 @@ void Time_Update(void)
             reset_start_flag = 1;
         }
     }
+    // 网络发送模块状态信息
     if(upload_time_delay != 0)
     {
         upload_time_delay--;
@@ -297,77 +325,80 @@ void Time_Update(void)
     InputScanProc();
 }
 
+//  模块自己更新状态信息
 void main_upload_run_state(void)
 {
-u16 i = 0;
-u8  link_down_status = 1;
-COMM_NODE_T  comm_node_new;
+    u16 i = 0;
+    u8  link_down_status = 1;
+    COMM_NODE_T  comm_node_new;
 
-if (user_paras_local.Belt_Number == 0) return;
+    if (user_paras_local.Belt_Number == 0) return;
 
 
 
-if (upload_runcnt >= 800) {
-    upload_runcnt = 0;
-    if (g_speed_gear_status != 0) {
-        for (i = 0; i < user_paras_local.Belt_Number; i++) {
-            if ((user_paras_local.belt_para[i].Func_Select_Switch >> 4) & 0x1)
+    if (upload_runcnt >= 800) {
+        upload_runcnt = 0;
+
+        //属于该控制器的最下游的皮带
+        if (g_speed_gear_status != 0) {
+            if (user_paras_local.Down_Stream_No != 0)//配置下游站号
             {
-                if ((user_paras_local.Down_Stream_No == 0) && (bStreamInfo.input_info.input_state == 0))//没有配置下游站号
-                {
-                    link_down_status = 0;
-                }
-                else if ((user_paras_local.Down_Stream_No == 0) && (bStreamInfo.input_info.input_state == 1)) {
-                    link_down_status = 1;
-                }
-                else
-                {
-                    link_down_status = g_link_down_stream_status;
-                }
-                break;
+                link_down_status = g_link_down_stream_status;
             }
-        }
-        if (user_paras_local.Down_Stream_No != 0)//配置下游站号
-        {
-            //            link_down_status = 1;
-            link_down_status = g_link_down_stream_status;
-        }
 
-        if ((user_paras_local.belt_para[user_paras_local.Belt_Number - 1].Func_Select_Switch >> 1) & 0x1)//联动功能开启
-        {
-            if ((((inverter_status_buffer[user_paras_local.Belt_Number - 1].fault_code >> 4) & 0x1) == 0)
-                && (get_inverter_fault_status(inverter_status_buffer[user_paras_local.Belt_Number - 1]) != 1))//本地皮带停止状态且没有报警
-            {
-                if (link_down_status == 1) {                    //启动
-                    comm_node_new.rw_flag = 1;
-                    comm_node_new.inverter_no = user_paras_local.Belt_Number;
-                    comm_node_new.speed_gear = g_speed_gear_status;
-                    comm_node_new.comm_interval = user_paras_local.belt_para[user_paras_local.Belt_Number - 1].Start_Delay_Time;
-                    comm_node_new.comm_retry = 3;
-                    AddUartSendData2Queue(comm_node_new);
+            for (i = 0; i < user_paras_local.Belt_Number; i++) {
+                //如果有外部准入信号
+                if ((user_paras_local.belt_para[i].Func_Select_Switch >> 4) & 0x1)       
+                {
+                    if ((user_paras_local.Down_Stream_No == 0) && (bStreamInfo.input_info.input_state == 0))//没有配置下游站号
+                    {
+                        link_down_status = 0;
+                    }
+                    else if ((user_paras_local.Down_Stream_No == 0) && (bStreamInfo.input_info.input_state == 1)) {
+                        link_down_status = 1;
+                    }
+                    break;
                 }
             }
-        }
-    }
-    if (g_speed_gear_status != 0) { //中间的皮带
-        if (user_paras_local.Belt_Number > 1) {
-            for (i = user_paras_local.Belt_Number - 1; i > 0; i--) {
-                if (((inverter_status_buffer[i].fault_code >> 4) & 0x1) == 1) {
-                    if ((((inverter_status_buffer[i - 1].fault_code >> 4) & 0x1) == 0)
-                        && (get_inverter_fault_status(inverter_status_buffer[i - 1]) != 1)) {
+
+
+            // 该控制器控制的最下游的皮带 应该启动
+            if ((user_paras_local.belt_para[user_paras_local.Belt_Number - 1].Func_Select_Switch >> 1) & 0x1)//联动功能开启
+            {
+                if ((((inverter_status_buffer[user_paras_local.Belt_Number - 1].fault_code >> 4) & 0x1) == 0)
+                    && (get_inverter_fault_status(inverter_status_buffer[user_paras_local.Belt_Number - 1]) != 1))//本地皮带停止状态且没有报警
+                {
+                    if (link_down_status == 1) {                    //启动
                         comm_node_new.rw_flag = 1;
-                        comm_node_new.inverter_no = i;
+                        comm_node_new.inverter_no = user_paras_local.Belt_Number;
                         comm_node_new.speed_gear = g_speed_gear_status;
-                        comm_node_new.comm_interval = user_paras_local.belt_para[i - 1].Start_Delay_Time;
+                        comm_node_new.comm_interval = user_paras_local.belt_para[user_paras_local.Belt_Number - 1].Start_Delay_Time;
                         comm_node_new.comm_retry = 3;
                         AddUartSendData2Queue(comm_node_new);
                     }
+                }
+            }
+        }
+        if (g_speed_gear_status != 0) { //中间的皮带   也应该启动
+            if (user_paras_local.Belt_Number > 1) {
+                for (i = user_paras_local.Belt_Number - 1; i > 0; i--) {
+                    if (((inverter_status_buffer[i].fault_code >> 4) & 0x1) == 1) {
+                        if ((((inverter_status_buffer[i - 1].fault_code >> 4) & 0x1) == 0)
+                            && (get_inverter_fault_status(inverter_status_buffer[i - 1]) != 1)
+                            && ((user_paras_local.belt_para[i - 1].Func_Select_Switch >> 1) & 0x1 == 1)) {
+                            comm_node_new.rw_flag = 1;
+                            comm_node_new.inverter_no = i;
+                            comm_node_new.speed_gear = g_speed_gear_status;
+                            comm_node_new.comm_interval = user_paras_local.belt_para[i - 1].Start_Delay_Time;
+                            comm_node_new.comm_retry = 3;
+                            AddUartSendData2Queue(comm_node_new);
+                        }
 
+                    }
                 }
             }
         }
     }
-}
 
 
 }
@@ -379,12 +410,10 @@ void main_msone_process(void)
     if (msone_flag == 1)
     {
         msone_flag = 0;
-        upload_55ms++;
 
-        modulestate_readcnt++;
 
-        //必须查询一次
-        if (freq_check_cnt > 300) {
+        //必须查询一次 变频器状态  300ms查询一次 一次查询一个变频器状态
+        if (freq_check_cnt > 200) {
             freq_check_cnt = 0;
 
             polling_num++;
@@ -399,32 +428,9 @@ void main_msone_process(void)
             AddUartSendData2Queue(comm_node_new);
         }
 
+        //串口通讯队列延时递减处理
         logic_cycle_decrease();
 
-        if (upload_55ms >= 500) {
-            upload_55ms = 0;
-            if ((((inverter_status_buffer[4].fault_code >> 4) & 0x1) == 0) && (((inverter_status_buffer[3].fault_code >> 4) & 0x1) == 1)) {
-                comm_node_new.rw_flag = 1;
-                comm_node_new.inverter_no = 4;
-                comm_node_new.speed_gear = 0;
-                comm_node_new.comm_interval = 10;
-                comm_node_new.comm_retry = 3;
-                AddUartSendData2Queue(comm_node_new);
-            }
-        }
-
-        if (upload_600ms != 0) {
-            upload_600ms--;
-        }
-        if (upload_600ms_3 != 0) {
-            upload_600ms_3--;
-        }
-        if (upload_600ms_2 != 0) {
-            upload_600ms_2--;
-        }
-        if (upload_600ms_1 != 0) {
-            upload_600ms_1--;
-        }
     }
 }
 

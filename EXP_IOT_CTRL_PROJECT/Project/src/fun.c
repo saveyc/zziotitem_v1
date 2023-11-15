@@ -62,6 +62,7 @@ u8 recv_msg_check(u8 *point, u16 len)
 
     return 1;
 }
+
 void recv_msg_process(u8 *point)
 {
     MSG_HEAD_DATA *head = (MSG_HEAD_DATA *)point;
@@ -95,7 +96,7 @@ void recv_msg_process(u8 *point)
     case RECV_MSG_WRITE_PARA_CMD_TYPE:
         user_paras_temp = *(USER_PARAS_T *)(point+sizeof(MSG_HEAD_DATA));
         if(user_paras_temp.Station_No == local_station)
-         {
+        {
             write_user_paras((u16*)(point+11+6));
             read_user_paras();
             user_paras_slave = user_paras_local;
@@ -106,17 +107,27 @@ void recv_msg_process(u8 *point)
             can_bus_send_write_user_paras(&user_paras_temp);
         }
         break;
-    case RECV_MSG_START_CMD_TYPE:
+    case RECV_MSG_START_CMD_TYPE:             //启停信息
+        Reset_Ctrl_Handle();                  //有故障先复位故障
+        reset_start_time_cnt = 0;
         Speed_Ctrl_Process(point[11]);
         can_bus_send_start_cmd(point[11]);
         break;
-    case RECV_MSG_RESET_CMD_TYPE:
+    case RECV_MSG_RESET_CMD_TYPE:            //复位信息
         Reset_Ctrl_Handle();
+        reset_start_time_cnt = 500;
         can_bus_send_reset_cmd();
+        g_emergency_stop = 0;                        //清除急停状态
         break;
-    case RECV_MSG_FUNC_SELECT_CMD_TYPE:
+    case RECV_MSG_FUNC_SELECT_CMD_TYPE:        //功能选择
         g_block_disable_flag = point[11];
         can_bus_send_func_select_cmd(point+11);
+        break;
+    case RECV_MSG_FUNC_EMERGENCY_STOP_TYPE:   //急停指令
+        Speed_Ctrl_Process(EMERGENCY_STOP);
+        can_bus_send_func_emergency_cmd();
+        g_emergency_stop = 1;                        //清除急停状态
+//        AddSendMsgToQueue(REPLY_RECV_MSG_FUNC_EMERGENCY_STOP_TYPE);
         break;
     default:
         break;

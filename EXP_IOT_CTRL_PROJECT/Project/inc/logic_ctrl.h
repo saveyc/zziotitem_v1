@@ -26,6 +26,9 @@
 #define  INPUT_TRIG_UP      1
 #define  INPUT_TRIG_DOWN    2
 
+#define  BELT_NUMMAX        10
+#define  STOPSTATUS_MAX     2200
+
 typedef struct {
     u8  input_state;
     u8  input_middle_state;
@@ -38,12 +41,13 @@ typedef struct {
     u16          button_state; //按钮有没有被触发
     u16          button_hold_time; //按钮按住的时间计时(ms)
     u16          trig_cnt;
+    u16          blocktrig_flag;       //触发过 用在堵包判断中
 }sButton_Info;
 
 #define USER_PARA_DATA_LEN    113
 
 typedef struct {
-    u16 Func_Select_Switch;    //功能选择开关(bit0:是否启用自动调速;bit1:前后联动功能;bit2:堵包检测功能;bit3:积放功能(使用光电))
+    u16 Func_Select_Switch;    //功能选择开关(bit0:是否启用自动调速;bit1:前后联动功能;bit2:堵包检测功能;bit3:积放功能(使用光电) bit4(有外部准入信号)) bit5 上游同步停止
     u16 Gear_1_Speed_Freq;     //第一档速度/频率(速度整型表示浮点数,如:12表示1.2m/s)(频率值整型表示浮点数,如:1234表示12.34hz)
     u16 Gear_2_Speed_Freq;     //第二档速度/频率
     u16 Gear_3_Speed_Freq;     //第三档速度/频率
@@ -67,8 +71,8 @@ typedef struct {
 }USER_PARAS_T;
 
 typedef struct {
-    u16 fault_code;       //bit15~8(变频器故障码),bit4:(运行状态),bit3(编码器状态),bit2(调速完成状态),bit1(堵包故障),bit0(485通讯故障)
-    u16 input_status;     //bit6(光电二),bit5(光电一),bit4~0(变频器DI输入状态(bit0:启动信号bit1:远程信号bit4:编码器输入))
+    u16 fault_code;       //bit15~8(变频器故障码),bit5(急停状态),bit4:(运行状态),bit3(编码器状态),bit2(调速完成状态),bit1(堵包故障),bit0(485通讯故障)
+    u16 input_status;     //bit7(光电一是否触发过) bit6(光电二),bit5(光电一),bit4~0(变频器DI输入状态(bit0:启动信号bit1:远程信号bit4:编码器输入))
     u16 line_speed;       //线速度实时反馈
     u16 electric_current; //变频器实时电流
     u16 inverter_freq;    //变频器输出频率
@@ -120,11 +124,16 @@ extern u8  g_read_start_status;
 extern u8  g_block_disable_flag;
 extern u8  g_speed_gear_status; //当前的速度档位(0:停止 1~5:五档速度)
 
+extern u8  g_link_down_phototrig_status;      //下游的光电是否触发过
+
 extern u16 start_delay_time_cnt;
 extern u16 stop_delay_time_cnt;
 
 extern u16 reset_start_time_cnt;
 extern u8  reset_start_flag;
+
+// can 接收到的急停信号
+extern u8  g_emergency_stop;
 
 extern USER_PARAS_T  user_paras_local;
 extern USER_PARAS_T  user_paras_slave;
@@ -132,6 +141,9 @@ extern USER_PARAS_T  user_paras_temp;
 
 extern MODULE_STATUS_T  module_status_buffer[];
 extern INVERTER_STATUS_T  inverter_status_buffer[];
+
+extern u16 logic_upload_stopStatus[];
+extern u16 logic_upload_lastRunStatus[];
 
 extern COMM_NODE_T comm_node;
 extern u8  comm_busy_flag;

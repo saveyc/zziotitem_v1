@@ -164,18 +164,18 @@ void USART1_IRQHandler(void)
   * @param  None
   * @retval None
   */
-void ETH_IRQHandler(void)
-{
-    /* Handles all the received frames */
-    while(ETH_GetRxPktSize() != 0)
-    {
-        LwIP_Pkt_Handle();
-    }
-
-    /* Clear the Eth DMA Rx IT pending bits */
-    ETH_DMAClearITPendingBit(ETH_DMA_IT_R);
-    ETH_DMAClearITPendingBit(ETH_DMA_IT_NIS);
-}
+//void ETH_IRQHandler(void)
+//{
+//    /* Handles all the received frames */
+//    while(ETH_GetRxPktSize() != 0)
+//    {
+//        LwIP_Pkt_Handle();
+//    }
+//
+//    /* Clear the Eth DMA Rx IT pending bits */
+//    ETH_DMAClearITPendingBit(ETH_DMA_IT_R);
+//    ETH_DMAClearITPendingBit(ETH_DMA_IT_NIS);
+//}
 
 void CAN1_RX0_IRQHandler(void)
 {
